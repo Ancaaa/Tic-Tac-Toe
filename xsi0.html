@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            
+            body {
+	       background-image: url("galaxy.jpg") ;
+                }
+
+
+            
+            .Square {
+              width: 50px;
+              height: 50px;
+              text-align : center;
+              font-size: 30px;
+              cursor: pointer;
+              color: #DC143C;
+            }
+            
+    section {
+	margin: auto auto auto auto;
+	background-color: rgba(255, 250, 240, 0.7);
+    width:300px;
+	height: 550px;
+    padding:100px; 
+	text-align: center;
+}
+            
+     footer {
+	margin: auto auto auto auto;
+	background-color: rgba(255, 250, 240, 0.7);
+    width:300px;
+	height: 50px;
+    padding:100px; 
+	text-align: center;
+}
+            
+        #message{
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-size: 30px;
+        color: #DC143C;
+            }
+            
+            #time{
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-size: 14px;
+        color: #D2691E;
+            }
+            
+            #date{
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-size: 14px;
+        color: #D2691E;
+        }
+            
+table{
+margin: auto auto auto auto;
+border-color: aliceblue !important;
+<!--position: relative;-->
+}
+
+
+th, td {
+	padding: 10px;
+}
+        </style>
+        
+        <script>
+            
+var userNameX;
+var userName0;
+
+            
+function myTimer() {
+    var d = new Date();
+    var t = d.toLocaleTimeString();
+    document.getElementById("time").innerHTML = t;
+}      
+            
+function startGame(){
+    
+var myVar = setInterval(function(){ myTimer() }, 1000);
+//var data = new Date();
+//p.innerHTML = data.getDate() + ' ' + months[data.getMonth()] + ' ' + data.getFullYear();
+var d = new Date();
+document.getElementById("date").innerHTML = d.toDateString();  
+    
+    
+    
+  if (document.getElementById('congrats')) {
+    document.getElementById('container').removeChild(document.getElementById('congrats'));
+  }
+
+    userNameX = userNameX || document.getElementById('user-name-x').value;
+    userName0 = userName0 || document.getElementById('user-name-0').value;
+
+    for(var i =1 ; i<= 9; i++)
+        clearBox(i);
+
+    document.turn = "X";
+    var newTurn = userNameX;
+
+    if(Math.random() < 0.5){
+        document.turn = "0";
+        newTurn = userName0;
+    }
+
+    document.winner = null;
+
+    setMessage(newTurn + " starts");
+
+    document.getElementById('user-info').style.display = 'none';
+    document.getElementById('the-game').style.display = 'block';
+}
+
+
+function setMessage(msg){
+    document.getElementById("message").innerText = msg;
+}
+
+
+function nextMove(square){
+    if (document.winner != null){
+        setMessage(document.winner + " already won");
+    }
+    else
+
+    if (square.innerText == ""){
+        square.innerText = document.turn;
+        switchTurn();
+    }
+    else{
+
+        setMessage("That square is already used!");
+
+    }
+
+}
+
+function switchTurn() {
+  var turn;
+    if (checkforWinner(document.turn)){
+        setMessage("Congrats " + document.turn + "!");
+        document.winner = document.turn;
+
+        var div = document.createElement('div');
+        div.setAttribute('id', 'congrats');
+        document.getElementById('the-game').style.display = 'none';
+
+        var winner;
+        if (document.winner === 'X') {
+          winner = userNameX;
+        } else {
+          winner = userName0;
+        }
+        var h1 = document.createElement('h1');
+        h1.innerHTML = "Congratulations, " + winner + "!";
+
+        var button = document.createElement('button');
+        button.innerHTML = 'Restart';
+        button.style.width = '60px';
+        button.style.height = '30px';
+        button.addEventListener('click', startGame);
+
+        div.appendChild(h1);
+        div.appendChild(button);
+
+        document.getElementById('container').appendChild(div)
+
+
+    }
+        else {
+    if (document.turn == "X") {
+        document.turn = "0";
+        turn = userName0;
+    }
+        else {
+        document.turn = "X";
+        turn = userNameX;
+    }
+
+    setMessage("It's " + turn + "'s turn"); }
+}
+
+
+function checkforWinner(move) {
+    var result = false;
+    if (checkRow(1,2,3,move) ||
+        checkRow(4,5,6,move) ||
+        checkRow(7,8,9,move) ||
+        checkRow(1,4,7,move) ||
+        checkRow(2,5,8,move) ||
+        checkRow(3,6,9,move) ||
+        checkRow(1,5,9,move) ||
+        checkRow(3,5,7,move)) {
+        result = true;
+    }
+  if (result) {
+
+
+  }
+    return result;
+
+}
+
+function checkRow(a, b, c, move) {
+    var result = false;
+    if (getBox(a) == move && getBox(b) == move && getBox(c) == move){
+        result = true;
+    }
+  return result;
+
+}
+
+function getBox (number){
+
+return document.getElementById("s" + number).innerText;
+}
+
+
+function clearBox (number){
+    document.getElementById("s" + number).innerText = "";
+}
+            
+function alerta(){
+    alert("Thank you!");
+}
+
+function radio() {
+    var x = document.getElementById("awesome").checked
+    if(x==true)
+    alert("Thank you!");
+    
+    var y= document.getElementById("lame").checked
+    if(y==true)
+    alert("We are sorry!");
+}
+        </script>
+    </head>
+    <body>
+    <section>
+        <div id='container'>
+
+      <div id="user-info">
+      <div>
+          <h1>Greetings players!</h1>
+        <span>X: </span>
+        <input type="text" name="name" value="" id='user-name-x'/>
+      </div>
+      <div>
+        <span>0: </span>
+        <input type="text" name="name" value="" id='user-name-0'/>
+      </div>
+      <button type="button" name="button" id='submit-button' style = "position: relative; top: 10px;" onclick="startGame();">Start</button>
+    </div>
+          
+      <div id='the-game' style='display: none'>
+          <div id='message'>
+
+        </div>
+          <p id="time"></p>
+          <p id="date"></p>
+        <table border = "1">
+            <tr>
+                <td id = "s1" class = "Square" onclick = "nextMove(this);"> </td>
+                <td id = "s2" class = "Square" onclick = "nextMove(this);"> </td>
+                <td id = "s3" class = "Square" onclick = "nextMove(this);"> </td>
+            </tr>
+            <tr>
+                <td id = "s4" class = "Square" onclick = "nextMove(this);"> </td>
+                <td id = "s5" class = "Square" onclick = "nextMove(this);"> </td>
+                <td id = "s6" class = "Square" onclick = "nextMove(this);"> </td>
+            </tr>
+            <tr>
+                <td id = "s7" class = "Square" onclick = "nextMove(this);"> </td>
+                <td id = "s8" class = "Square" onclick = "nextMove(this);"> </td>
+                <td id = "s9"class = "Square" onclick = "nextMove(this);"> </td>
+            </tr>
+        </table>
+          
+        <button style="width: 60px; height: 30px; position: relative; top: 30px;" onclick="startGame()">Restart</button>
+          
+         <form style="position: relative; top: 80px;">
+              <h1>Rate this game</h1>
+              <input type="radio" name="rate" id = "awesome" value="Awesome" checked>Awesome!
+              <br>
+              <input type="radio" name="rate" id = "lame" value="Lame">Lame :(
+           
+             <br> <button type="submit" value = "submit" onclick="radio()">Submit</button>
+          </form>
+          
+          
+    </div>
+            </section>
+        <footer>
+            <form action="">
+                <p>Subscribe to our site?</p>
+            <input type="checkbox" name="vehicle" value="Bike">Subscribe
+             <input type="checkbox" name="vehicle" value="Bike">Send me notifications   <br>
+                <br> <button type="submit" value = "submit" onclick="">Submit</button>
+</form>
+        </footer>
+      </div>
+    </body>
+</html>
